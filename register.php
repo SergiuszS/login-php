@@ -7,31 +7,42 @@ if(Session::isLogged()){
     echo 'zalogowany';
 }else{
     if(isset($_POST['login'])){
-        echo 'passed';
-        $user = new User(array('login', 'email', 'password', 'password_again'));
-        $validate = new Validate();
-        $validate->checkData(array(
+        $user = new User(array('login', 'email', 'password', 'password_again')); //przekazanie informacji, jakie pola z POST bieżemy pod uwagę
+        $validate = new Validate($_POST);
+        //sprawdzamy dane według kryteriów
+        $validateResult = $validate->checkData(array(
             'login' =>array(
+                'required' => true,
                 'unique' => true,
                 'min' => 5,
                 'max' => 30
             ),
             'email' =>array(
+                'required' => true,
                 'unique' => true,
                 'min' => 5,
                 'max' => 40,
                 'contain' => '@'
             ),
             'password' =>array(
+                'required' => true,
                 'min' => 8,
                 'max' => 40
             ),
             'password_again' =>array(
+                'required' => true,
                 'min' => 8,
                 'max' => 40,
                 'identical' => 'password'
             )
         ));
+
+        if($validateResult){
+            //foreach($validateResult as $error){
+            //echo "$error <br>";
+            //}
+            echo current($validateResult);
+        }
     }
 }
 
