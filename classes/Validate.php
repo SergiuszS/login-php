@@ -13,7 +13,6 @@ class Validate {
                 //echo $rule_name." = ".$rule_value."   ";
                 $this->check($rule_name, $rule_value, $field);
             }
-                echo "<br>";
         }
         return $this->errors;
     }
@@ -22,22 +21,22 @@ class Validate {
             switch ($rule_name) {
         case "required":
             if(($this->data[$field] == null) && $rule_value){
-                $this->errors[] = "Należy wypełnić pole $field";
+                $this->errors[$field][] = "To pole jest wymagane";
             }
             break;
         case "min":
             if(strlen($this->data[$field]) < $rule_value){
-                $this->errors[] = "$field musi mieć minimalnie $rule_value znaków!";
+                $this->errors[$field][]  = "Minimalna ilość znaków to $rule_value";
             }
             break;
         case "max":
             if(strlen($this->data[$field]) > $rule_value){
-                $this->errors[] = "$field musi mieć maksymalnie $rule_value znaków!";
+                $this->errors[$field][]  = "Maksymalna ilość znaków to $rule_value";
             }
             break;
         case "contain":
             if(strpos($this->data[$field], $rule_value) === false) {
-                $this->errors[] = "$field musi zawierać znak $rule_value";
+                $this->errors[$field][]  = "To pole musi zawierać znak $rule_value";
             }
             break;
         case "unique":
@@ -45,7 +44,7 @@ class Validate {
         break;
         case "identical":
             if($this->data[$field] !== $this->data[$rule_value]) {
-                $this->errors[] = "$field musi być zgodne z $rule_value";
+                $this->errors[$field][]  = "Pola niezgodne";
             }
         break;
     }

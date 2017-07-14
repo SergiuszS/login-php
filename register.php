@@ -2,25 +2,25 @@
 <html>
 <?php
 require_once 'init.php';
-
+$validateResult = null;
 if(Session::isLogged()){
     echo 'zalogowany';
 }else{
     if(isset($_POST['login'])){
-        $user = new User(array('login', 'email', 'password', 'password_again')); //przekazanie informacji, jakie pola z POST bieżemy pod uwagę
+        $user = new User(array('login', 'email', 'password', 'password_again')); //przekazanie informacji, jakie pola z POST bierzemy pod uwagę
         $validate = new Validate($_POST);
         //sprawdzamy dane według kryteriów
         $validateResult = $validate->checkData(array(
             'login' =>array(
                 'required' => true,
                 'unique' => true,
-                'min' => 5,
+                'min' => 4,
                 'max' => 30
             ),
             'email' =>array(
                 'required' => true,
                 'unique' => true,
-                'min' => 5,
+                'min' => 6,
                 'max' => 40,
                 'contain' => '@'
             ),
@@ -36,12 +36,8 @@ if(Session::isLogged()){
                 'identical' => 'password'
             )
         ));
-
-        if($validateResult){
-            //foreach($validateResult as $error){
-            //echo "$error <br>";
-            //}
-            echo current($validateResult);
+        if(!isset($validateResult)){
+            echo "Rejestracja udana!";
         }
     }
 }
@@ -58,10 +54,14 @@ if(Session::isLogged()){
 <body>
     <h1>Rejestracja</h1>
     <form action="" method="POST">
-        Login: <input type="text" name="login" autocomplete="off"><br>
-        E-mail: <input type="text" name="email" autocomplete="off"><br>
-        Hasło: <input type="password" name="password"><br>
-        Powtórz hasło: <input type="password" name="password_again"><br>
+        Login: <input type="text" name="login" autocomplete="off" value="<?php if(isset($_POST['login'])) echo $_POST['login']; ?>">
+        <?php echo errors("login", $validateResult);?><br>
+        E-mail: <input type="text" name="email" autocomplete="off">
+        <?php echo errors("email", $validateResult);?><br>
+        Hasło: <input type="password" name="password">
+        <?php echo errors("password", $validateResult);?><br>
+        Powtórz hasło: <input type="password" name="password_again">
+        <?php echo errors("password_again", $validateResult);?><br>
   <input type="submit" value="Zarejestruj">
 </form>
 </body>
