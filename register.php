@@ -7,7 +7,7 @@ if(Session::isLogged()){
     echo 'zalogowany';
 }else{
     if(isset($_POST['login'])){
-        $user = new User(array('login', 'email', 'password', 'password_again')); //przekazanie informacji, jakie pola z POST bierzemy pod uwagę
+        
         $validate = new Validate($_POST);
         //sprawdzamy dane według kryteriów
         $validateResult = $validate->checkData(array(
@@ -36,8 +36,17 @@ if(Session::isLogged()){
                 'identical' => 'password'
             )
         ));
+        //jeśli brak błędów = rejestracja możliwa
         if(!isset($validateResult)){
-            echo "Rejestracja udana!";
+        $database = new Database($DATABASE); //utworzenie połączenia z bazą danych (przekazanie danych logowania w parametrze)
+        $user = new User($database, array('login', 'email', 'password')); //przekazanie informacji, jakie pola przekazujemy i przygotowanie danych użytkownika
+        $userData = $user->getData(); //wyjęcie gotowych danych (array)
+        $database->add("users", $userData); //dodanie użytkownika do bazy
+        if($database->error){
+            echo "Wystąpił błąd. Prosimy spróbować ponownie później";
+        }else{
+            echo "Rejestracja udana";
+        }
         }
     }
 }
@@ -56,7 +65,7 @@ if(Session::isLogged()){
     <form action="" method="POST">
         Login: <input type="text" name="login" autocomplete="off" value="<?php if(isset($_POST['login'])) echo $_POST['login']; ?>">
         <?php echo errors("login", $validateResult);?><br>
-        E-mail: <input type="text" name="email" autocomplete="off">
+        E-mail: <input type="text" name="email" autocomplete="off" value="<?php if(isset($_POST['email'])) echo $_POST['email']; ?>">
         <?php echo errors("email", $validateResult);?><br>
         Hasło: <input type="password" name="password">
         <?php echo errors("password", $validateResult);?><br>

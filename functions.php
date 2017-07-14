@@ -10,3 +10,7 @@ function errors($name, $validateResult){
             }
         }
 }
+
+function clear($item){
+        return htmlentities($item, ENT_QUOTES, 'UTF-8');
+    }
