@@ -7,8 +7,8 @@ if(Session::isLogged()){
     echo 'zalogowany';
 }else{
     if(isset($_POST['login'])){
-        
-        $validate = new Validate($_POST);
+        $database = new Database($DATABASE); //utworzenie połączenia z bazą danych (przekazanie danych logowania w parametrze)
+        $validate = new Validate($_POST, $database);
         //sprawdzamy dane według kryteriów
         $validateResult = $validate->checkData(array(
             'login' =>array(
@@ -38,7 +38,6 @@ if(Session::isLogged()){
         ));
         //jeśli brak błędów = rejestracja możliwa
         if(!isset($validateResult)){
-        $database = new Database($DATABASE); //utworzenie połączenia z bazą danych (przekazanie danych logowania w parametrze)
         $user = new User($database, array('login', 'email', 'password')); //przekazanie informacji, jakie pola przekazujemy i przygotowanie danych użytkownika
         $userData = $user->getData(); //wyjęcie gotowych danych (array)
         $database->add("users", $userData); //dodanie użytkownika do bazy

@@ -15,6 +15,8 @@ class Database{
     }
     //wykonywanie poleceń sql
      private function query($sql) {
+                $this->count = null;
+                $this->results = null;
                 $this->query = $this->pdo->prepare($sql);
                 if($this->query->execute()){
                     $this->results = $this->query->fetchAll(PDO::FETCH_OBJ);
@@ -40,8 +42,13 @@ class Database{
         $sql = "INSERT INTO $table ($names) VALUES ($values)";
         $this->query($sql);
     }
-
-
-
+    //czy wewnątrz danej tabeli znajduje się już jakaś wartość
+    public function is_inside($tableName, $fieldName, $value){
+        $table = $this->DATABASE[$tableName];
+        $sql = "SELECT * FROM $table WHERE $fieldName = '$value'";
+        $this->query($sql);
+        if($this->count) return true;
+        return false;
+    }
 
 }

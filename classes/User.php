@@ -9,6 +9,7 @@ class User{
         foreach($array as $name){
             $this->data[$name] = clear($_POST[$name]);
         }
+        $this->data['password'] = Password::generateHash($this->data['password']);
         $this->data['info'] = "Informacje o profilu";
         $this->data['image'] = "false";
         $this->data['color'] = "false";

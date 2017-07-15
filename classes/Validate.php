@@ -3,8 +3,10 @@
 class Validate {
     private $errors = null; //do zbierania błędów (błędnych danych podanych przez użytkownika)
     private $data = array(); //dane z tablicy POST
-    public function __construct($array){
+    private $connection;
+    public function __construct($array, $connection){
         $this->data = $array;
+        $this->connection = $connection;
     }
     public function checkData($array){
         foreach($array as $field => $rules){
@@ -39,7 +41,8 @@ class Validate {
             }
             break;
         case "unique":
-            echo "";
+            $test = $this->connection->is_inside("users", $field, $clearField);
+            if($test) $this->errors[$field][]  = "Taki $field już istnieje";
         break;
         case "identical":
             if($clearField !== clear($this->data[$rule_value])) {
