@@ -1,11 +1,17 @@
 <?php
 
-class Session {
-    private static $logged = false;
+class Session{
     public static function isLogged() {
-        return self::$logged;
+        if(isset($_SESSION['logged'])) return $_SESSION['logged'];
+        return false;
     }
-    public function setLogged($value){
-        self::$logged = $value;
+    public static function setLogged($value){
+        $_SESSION['logged'] = $value;
+    }
+    public static function setValue($name, $value){
+        $_SESSION[$name] = $value;
+    }
+    public static function get($name){
+        return $_SESSION[$name];
     }
 }

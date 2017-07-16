@@ -41,7 +41,7 @@ class Validate {
             }
             break;
         case "unique":
-            $test = $this->connection->is_inside("users", $field, $clearField);
+            $test = $this->connection->get("users", $field, $clearField);
             if($test) $this->errors[$field][]  = "Taki $field już istnieje";
         break;
         case "identical":

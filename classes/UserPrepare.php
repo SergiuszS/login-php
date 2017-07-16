@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../init.php';
 //przygotowanie danych do rejestracji
-class User{
+class UserPrepare{
     private $data = array();
     private $pdo;
     public function __construct($pdo, $array){

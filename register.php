@@ -4,7 +4,7 @@
 require_once 'init.php';
 $validateResult = null;
 if(Session::isLogged()){
-    echo 'zalogowany';
+    header("Location: home.php");
 }else{
     if(isset($_POST['login'])){
         $database = new Database($DATABASE); //utworzenie połączenia z bazą danych (przekazanie danych logowania w parametrze)
@@ -38,13 +38,13 @@ if(Session::isLogged()){
         ));
         //jeśli brak błędów = rejestracja możliwa
         if(!isset($validateResult)){
-        $user = new User($database, array('login', 'email', 'password')); //przekazanie informacji, jakie pola przekazujemy i przygotowanie danych użytkownika
+        $user = new UserPrepare($database, array('login', 'email', 'password')); //przekazanie informacji, jakie pola przekazujemy i przygotowanie danych użytkownika
         $userData = $user->getData(); //wyjęcie gotowych danych (array)
         $database->add("users", $userData); //dodanie użytkownika do bazy
         if($database->error){
             echo "Wystąpił błąd. Prosimy spróbować ponownie później";
         }else{
-            echo "Rejestracja udana";
+            header("Location: index.php");
         }
         }
     }
