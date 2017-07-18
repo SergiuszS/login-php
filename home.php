@@ -18,6 +18,7 @@ if(!Session::isLogged()){
     <title>Home</title>
 </head>
 <body>
-    
+    <hr>
+    <a href="logout.php">Wyloguj się</a>
 </body>
 </html>

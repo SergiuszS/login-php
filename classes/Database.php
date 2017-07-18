@@ -43,9 +43,12 @@ class Database{
         $this->query($sql);
     }
     //wczytanie z danych z danej tabeli
-    public function get($tableName, $fieldName, $value){
+    public function get($tableName, $fieldName, $value, $what = '*'){
         $table = $this->DATABASE[$tableName];
-        $sql = "SELECT * FROM $table WHERE $fieldName = '$value'";
+        if(is_array($what)){ //jeśli nie wybieramy wszystkiego
+            $what = implode(", ", $what);
+        }
+        $sql = "SELECT $what FROM $table WHERE $fieldName = '$value'";
         $this->query($sql);
         if($this->count) return $this->results;
         return false;
